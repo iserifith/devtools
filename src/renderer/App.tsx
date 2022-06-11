@@ -1,39 +1,38 @@
 import { ThemeProvider } from '@mui/system';
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import BaseLayout from './components/BaseLayout';
-import Homepage from './screens/Homepage';
-import JWTDecoder from './screens/JWTDecoder';
-import theme from './utils/theme';
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    Component: Homepage,
-  },
-  {
-    path: '/jwt-decoder',
-    name: 'JWT Decoder',
-    Component: JWTDecoder,
-  },
-];
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import BaseLayout from './components/BaseLayout';
+import ToolLayout from './components/ToolLayout';
+import routes from './constants/routes';
+import Homepage from './screens/Homepage';
+import theme from './utils/theme';
 
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <BaseLayout>
-        <Router>
+      <Router>
+        <BaseLayout>
           <Routes>
-            {routes.map((route) => (
-              <Route
-                key={route.name}
-                path={route.path}
-                element={<route.Component />}
-              />
-            ))}
+            <Route path="/" element={<Homepage />} />
+            {routes.map((route) => {
+              return route.items.map((child) => {
+                return (
+                  <Route
+                    key={child.path}
+                    path={child.path}
+                    element={
+                      <ToolLayout
+                        component={child.component}
+                        title={child.title}
+                      />
+                    }
+                  />
+                );
+              });
+            })}
           </Routes>
-        </Router>
-      </BaseLayout>
+        </BaseLayout>
+      </Router>
     </ThemeProvider>
   );
 }

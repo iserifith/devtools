@@ -21,7 +21,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-
+import { useNavigate } from 'react-router-dom';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { CSSObject } from '@emotion/react';
 import routes from 'renderer/constants/routes';
@@ -144,6 +144,7 @@ const MenuButton = styled(IconButton)(() => ({
 
 const BaseLayout: FC<BaseLayoutProps> = ({ children }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [collapse, setCollapse] = useState<[] | any>([]);
 
@@ -195,7 +196,11 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children }) => {
               <List component="div">
                 {items.map((child) => {
                   return (
-                    <ListItem button key={child.title}>
+                    <ListItem
+                      onClick={() => navigate(child.path)}
+                      button
+                      key={child.title}
+                    >
                       <ListItemText primary={child.title} />
                     </ListItem>
                   );
